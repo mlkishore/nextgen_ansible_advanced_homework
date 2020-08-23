@@ -16,7 +16,8 @@
  
 - name: install base tools and packages
   yum:
-    name: ['httpie', 'python-pip'] 
+    name: 
+      - httpd
+      - haproxy
     state: latest
-
 
