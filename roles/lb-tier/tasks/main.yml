@@ -1,22 +1,17 @@
 ---
-- name: install {{ payload }}
-  yum:
-    name: "{{ payload }}"
-    state: latest
+- name: Install load balancer packages
+  package:
+    name: "{{ load_balancer_packages }}"
+    state: present
 
-- name: enable {{ payload }} at boot
-  service:
-    name: "{{ payload }}"
-    enabled: yes
-
-- name: configure haproxy to load balance over app servers
+- name: Configure haproxy load balancing
   template:
     src: haproxy.cfg.j2
     dest: /etc/haproxy/haproxy.cfg
-    mode: 0644
+  notify: restart_haproxy
 
-- name: start {{ payload }}
+- name: Enable Haproxy
   service:
-    name: "{{ payload }}"
-    state: restarted
-
+    name: haproxy
+    state: started
+    enabled: true
